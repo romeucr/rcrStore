@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.rcrdev.rcrstore.domain.Address;
 import com.rcrdev.rcrstore.domain.Category;
 import com.rcrdev.rcrstore.domain.City;
+import com.rcrdev.rcrstore.domain.Client;
 import com.rcrdev.rcrstore.domain.Product;
 import com.rcrdev.rcrstore.domain.State;
+import com.rcrdev.rcrstore.domain.enums.ClientType;
+import com.rcrdev.rcrstore.repositories.AddressRepository;
 import com.rcrdev.rcrstore.repositories.CategoryRepository;
 import com.rcrdev.rcrstore.repositories.CityRepository;
+import com.rcrdev.rcrstore.repositories.ClientRepository;
 import com.rcrdev.rcrstore.repositories.ProductRepository;
 import com.rcrdev.rcrstore.repositories.StateRepository;
 
@@ -20,16 +25,22 @@ import com.rcrdev.rcrstore.repositories.StateRepository;
 public class RcrStoreApplication implements CommandLineRunner {
 
 	@Autowired
-	CategoryRepository categoryRepository;
+	private CategoryRepository categoryRepository;
 	
 	@Autowired
-	ProductRepository productRepository;
+	private ProductRepository productRepository;
 	
 	@Autowired
-	StateRepository stateRepository;
+	private StateRepository stateRepository;
 	
 	@Autowired
-	CityRepository cityRepository;
+	private CityRepository cityRepository;
+	
+	@Autowired
+	private ClientRepository clientRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RcrStoreApplication.class, args);
@@ -66,6 +77,17 @@ public class RcrStoreApplication implements CommandLineRunner {
 
 		stateRepository.saveAll(Arrays.asList(est1, est2));
 		cityRepository.saveAll(Arrays.asList(c1, c2, c3));
+		
+		Client cli1 = new Client(null, "Maria Silva", "maria@email.com", "12376524533", ClientType.PERSON);
+		cli1.getphoneNumbers().addAll(Arrays.asList("1287652323", "1287653434"));
+		
+		Address add1 = new Address(null, "Rua Flores", "300", "Apto 303", "Jardim", "20570000", cli1, c1);
+		Address add2 = new Address(null, "Avenida Matos", "105", "Sala 800", "Centro", "3877625221", cli1, c2);
+		
+		cli1.getAddresses().addAll(Arrays.asList(add1, add2));
+
+		clientRepository.saveAll(Arrays.asList(cli1));
+		addressRepository.saveAll(Arrays.asList(add1, add2));
 		
 	}
 
