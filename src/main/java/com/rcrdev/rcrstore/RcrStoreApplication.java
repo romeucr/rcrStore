@@ -65,17 +65,17 @@ public class RcrStoreApplication implements CommandLineRunner {
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2));		
 		productRepository.saveAll(Arrays.asList(p1, p2, p3));
 		
-		State est1 = new State(null, "Minas Gerais");
-		State est2 = new State(null, "Sao Paulo");
+		State state1 = new State(null, "Minas Gerais");
+		State state2 = new State(null, "Sao Paulo");
 		
-		City c1 = new City(null, "Uberlandia", est1);
-		City c2 = new City(null, "Sao Paulo", est2);
-		City c3 = new City(null, "Campinas", est2);
+		City c1 = new City(null, "Uberlandia", state1);
+		City c2 = new City(null, "Sao Paulo", state2);
+		City c3 = new City(null, "Campinas", state2);
 		
-		est1.getCities().addAll(Arrays.asList(c1));
-		est2.getCities().addAll(Arrays.asList(c2, c3));
+		state1.getCities().addAll(Arrays.asList(c1));
+		state2.getCities().addAll(Arrays.asList(c2, c3));
 
-		stateRepository.saveAll(Arrays.asList(est1, est2));
+		stateRepository.saveAll(Arrays.asList(state1, state2));
 		cityRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
 		Client cli1 = new Client(null, "Maria Silva", "maria@email.com", "12376524533", ClientType.PERSON);
