@@ -1,5 +1,6 @@
 package com.rcrdev.rcrstore;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,16 +9,23 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.rcrdev.rcrstore.domain.Address;
+import com.rcrdev.rcrstore.domain.CardPayment;
 import com.rcrdev.rcrstore.domain.Category;
 import com.rcrdev.rcrstore.domain.City;
 import com.rcrdev.rcrstore.domain.Client;
+import com.rcrdev.rcrstore.domain.ClientOrder;
+import com.rcrdev.rcrstore.domain.Payment;
 import com.rcrdev.rcrstore.domain.Product;
 import com.rcrdev.rcrstore.domain.State;
+import com.rcrdev.rcrstore.domain.TicketPayment;
 import com.rcrdev.rcrstore.domain.enums.ClientType;
+import com.rcrdev.rcrstore.domain.enums.PaymentStatus;
 import com.rcrdev.rcrstore.repositories.AddressRepository;
 import com.rcrdev.rcrstore.repositories.CategoryRepository;
 import com.rcrdev.rcrstore.repositories.CityRepository;
+import com.rcrdev.rcrstore.repositories.ClientOrderRepository;
 import com.rcrdev.rcrstore.repositories.ClientRepository;
+import com.rcrdev.rcrstore.repositories.PaymentRepository;
 import com.rcrdev.rcrstore.repositories.ProductRepository;
 import com.rcrdev.rcrstore.repositories.StateRepository;
 
@@ -41,6 +49,12 @@ public class RcrStoreApplication implements CommandLineRunner {
 	
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private ClientOrderRepository clientOrderRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RcrStoreApplication.class, args);
@@ -88,6 +102,22 @@ public class RcrStoreApplication implements CommandLineRunner {
 
 		clientRepository.saveAll(Arrays.asList(cli1));
 		addressRepository.saveAll(Arrays.asList(add1, add2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		ClientOrder cliOrd1 = new ClientOrder(null, sdf.parse("30/09/2017 10:32"), cli1, add1);
+		ClientOrder cliOrd2 = new ClientOrder(null, sdf.parse("10/10/2017 19:35"), cli1, add2);
+		
+		Payment pay1 = new CardPayment(null, PaymentStatus.PAID, cliOrd1, 6);
+		cliOrd1.setPayment(pay1);
+		
+		Payment pay2 = new TicketPayment(null, PaymentStatus.PENDING, cliOrd2, sdf.parse("20/10/2017 00:00"), null);
+		cliOrd2.setPayment(pay2);
+		
+		cli1.getOrders().addAll(Arrays.asList(cliOrd1, cliOrd2));
+		
+		clientOrderRepository.saveAll(Arrays.asList(cliOrd1, cliOrd2));
+		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
 		
 	}
 
