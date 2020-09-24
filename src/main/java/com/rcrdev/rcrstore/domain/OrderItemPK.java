@@ -23,12 +23,15 @@ public class OrderItemPK implements Serializable {
 	public ClientOrder getClientOrder() {
 		return clientOrder;
 	}
+	
 	public void setClientOrder(ClientOrder clientOrder) {
 		this.clientOrder = clientOrder;
 	}
+	
 	public Product getProduct() {
 		return product;
 	}
+	
 	public void setProduct(Product product) {
 		this.product = product;
 	}

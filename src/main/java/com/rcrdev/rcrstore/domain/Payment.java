@@ -10,21 +10,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rcrdev.rcrstore.domain.enums.PaymentStatus;
 
+/*mapping the inheritance using different tables for 
+TicketPayment and CardPayment. Other option is use a single table with all the fields 
+of both classes.*/
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED) /*mapping the inheritance using different tables for 
-	TicketPayment and CardPayment. Other option is use a single table with all the fields 
-	of both classes.*/
+@Inheritance(strategy=InheritanceType.JOINED) 
 public abstract class Payment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id /*Its the same in Order, so was used the annotations @JoinColumn and @MapsId do indicates that. 1to1 mapping */
+	 /*Its the same in Order, so was used the annotations @JoinColumn and @MapsId do indicates that. 1to1 mapping */
+	@Id
 	private Integer id;
 	private Integer status; 
 	
-	@JsonBackReference
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name="order_id")
 	@MapsId 
