@@ -2,6 +2,8 @@ package com.rcrdev.rcrstore.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,7 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class ClientOrder implements Serializable {
@@ -19,11 +25,15 @@ public class ClientOrder implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id; 
+	
+	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
 	private Date instant;
 	
-	@OneToOne(cascade=CascadeType.ALL, mappedBy="order") /*Indicating thats was mapped by the order in the Order Class. 1to1 mapping*/
+	@JsonManagedReference
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="order") /*Indicating thats was mapped by the order in the ClientOrder class. 1to1 mapping*/
 	private Payment payment;
 	
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name="client_id")
 	private Client client;
@@ -31,6 +41,10 @@ public class ClientOrder implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="delivery_address_id")
 	private Address deliveryAddress;
+	
+	@OneToMany(mappedBy="id.clientOrder")
+	private Set<OrderItem> items = new HashSet<>();
+	
 	
 	public ClientOrder() {
 	}
@@ -83,6 +97,14 @@ public class ClientOrder implements Serializable {
 		this.deliveryAddress = deliveryAddress;
 	}
 
+	public Set<OrderItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<OrderItem> items) {
+		this.items = items;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -107,5 +129,7 @@ public class ClientOrder implements Serializable {
 			return false;
 		return true;
 	}
+
+
 	
 }

@@ -14,6 +14,7 @@ import com.rcrdev.rcrstore.domain.Category;
 import com.rcrdev.rcrstore.domain.City;
 import com.rcrdev.rcrstore.domain.Client;
 import com.rcrdev.rcrstore.domain.ClientOrder;
+import com.rcrdev.rcrstore.domain.OrderItem;
 import com.rcrdev.rcrstore.domain.Payment;
 import com.rcrdev.rcrstore.domain.Product;
 import com.rcrdev.rcrstore.domain.State;
@@ -25,6 +26,7 @@ import com.rcrdev.rcrstore.repositories.CategoryRepository;
 import com.rcrdev.rcrstore.repositories.CityRepository;
 import com.rcrdev.rcrstore.repositories.ClientOrderRepository;
 import com.rcrdev.rcrstore.repositories.ClientRepository;
+import com.rcrdev.rcrstore.repositories.OrderItemRepository;
 import com.rcrdev.rcrstore.repositories.PaymentRepository;
 import com.rcrdev.rcrstore.repositories.ProductRepository;
 import com.rcrdev.rcrstore.repositories.StateRepository;
@@ -55,6 +57,9 @@ public class RcrStoreApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PaymentRepository paymentRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RcrStoreApplication.class, args);
@@ -118,6 +123,19 @@ public class RcrStoreApplication implements CommandLineRunner {
 		
 		clientOrderRepository.saveAll(Arrays.asList(cliOrd1, cliOrd2));
 		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
+		
+		OrderItem oi1 = new OrderItem(cliOrd1, p1, 0.00, 1, 2000.00);
+		OrderItem oi2 = new OrderItem(cliOrd1, p3, 0.00, 2, 80.00);
+		OrderItem oi3 = new OrderItem(cliOrd2, p2, 100.00, 1, 800.00);
+		
+		cliOrd1.getItems().addAll(Arrays.asList(oi1, oi2));
+		cliOrd2.getItems().addAll(Arrays.asList(oi3));
+		
+		p1.getItems().addAll(Arrays.asList(oi1));
+		p2.getItems().addAll(Arrays.asList(oi3));
+		p3.getItems().addAll(Arrays.asList(oi2));
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3));
 		
 	}
 
