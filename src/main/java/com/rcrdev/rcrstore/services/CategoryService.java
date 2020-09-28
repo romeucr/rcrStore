@@ -24,6 +24,11 @@ public class CategoryService {
 	
 	public Category insert(Category obj) {
 		obj.setId(null); //objeto novo tem que ter id nulo, se estiver valendo alguma coisa, o metodo vai considerar uma atualizacao e nao insercao
+		return repo.save(obj); //metodo save do Spring Data serve tanto para inserir quanto para atualizar. Quando id foi nulo, insere. Quando nao, atualiza
+	}
+	
+	public Category update(Category obj) {
+		find(obj.getId());
 		return repo.save(obj);
 	}
 	
