@@ -32,7 +32,7 @@ public class CategoryResource {
 	public ResponseEntity<Void> insert(@RequestBody Category obj) { //RequestBody solicita um corpo para a requisicao JSON
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(obj.getId()).toUri(); //a resposta 201 requere o retorno do caminho gerado com a insercao do dado. O caminho é criado aqui
+				.path("/{id}").buildAndExpand(obj.getId()).toUri(); //a resposta 201 requer o retorno do caminho gerado com a insercao do dado. O caminho é criado aqui
 		return ResponseEntity.created(uri).build();
 	}
 	
@@ -40,6 +40,12 @@ public class CategoryResource {
 	public ResponseEntity<Void> update(@RequestBody Category obj, @PathVariable Integer id) {
 		obj.setId(id);
 		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 }
