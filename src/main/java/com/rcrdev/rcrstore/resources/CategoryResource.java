@@ -1,6 +1,8 @@
 package com.rcrdev.rcrstore.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.rcrdev.rcrstore.domain.Category;
+import com.rcrdev.rcrstore.dto.CategoryDTO;
 import com.rcrdev.rcrstore.services.CategoryService;
 
 @RestController //to inform that the class is a Rest Controller
@@ -47,5 +50,13 @@ public class CategoryResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<CategoryDTO>> findAll() {
+		List<Category> list = service.findAll();
+		List<CategoryDTO> listDTO = list.stream().map(obj -> new CategoryDTO(obj)).collect(Collectors.toList()); //convertendo lista de category em lista de categoriaDTO
+		
+		return ResponseEntity.ok().body(listDTO);
 	}
 }

@@ -1,5 +1,6 @@
 package com.rcrdev.rcrstore.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,10 @@ public class CategoryService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Delete denied. There are products with this category.");
 		}
+	}
+
+	public List<Category> findAll() {
+		return repo.findAll();
 	}
 	
 }
