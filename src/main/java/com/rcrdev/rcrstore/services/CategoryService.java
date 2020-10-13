@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.rcrdev.rcrstore.domain.Category;
@@ -22,14 +25,16 @@ public class CategoryService {
 		Optional<Category> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 
-		"Object not found! Id: " + id + ", Type: " + Category.class.getName()));
+				"Object not found! Id: " + id + ", Type: " + Category.class.getName()));
 	}
-	
+
 	public Category insert(Category obj) {
-		obj.setId(null); //objeto novo tem que ter id nulo, se estiver valendo alguma coisa, o metodo vai considerar uma atualizacao e nao insercao
-		return repo.save(obj); //metodo save do Spring Data serve tanto para inserir quanto para atualizar. Quando id foi nulo, insere. Quando nao, atualiza
+		obj.setId(null); // objeto novo tem que ter id nulo, se estiver valendo alguma coisa, o metodo
+							// vai considerar uma atualizacao e nao insercao
+		return repo.save(obj); // metodo save do Spring Data serve tanto para inserir quanto para atualizar.
+								// Quando id foi nulo, insere. Quando nao, atualiza
 	}
-	
+
 	public Category update(Category obj) {
 		find(obj.getId());
 		return repo.save(obj);
@@ -47,5 +52,13 @@ public class CategoryService {
 	public List<Category> findAll() {
 		return repo.findAll();
 	}
-	
+
+	// Page e pagerequest sao objetos do Spring Data para paginaçao
+	public Page<Category> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		// em PageRequest, direction é um valor inteiro. feita a conversao de String a
+		// inteiro com o Direction.valueOf()
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return repo.findAll(pageRequest);
+	}
+
 }
