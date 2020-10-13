@@ -37,8 +37,9 @@ public class CategoryService {
 	}
 
 	public Category update(Category obj) {
-		find(obj.getId());
-		return repo.save(obj);
+		Category newObj = find(obj.getId());
+		updateData(newObj, obj); //com isso, ao atualizar somente um campo, o restante nao será informado como null
+		return repo.save(newObj);
 	}
 
 	public void delete(Integer id) {
@@ -65,6 +66,10 @@ public class CategoryService {
 	//metodo auxiliar que transforma CategoryDTO em Category
 	public Category fromDTO(CategoryDTO objDTO) {
 		return new Category(objDTO.getId(), objDTO.getName());
+	}
+	
+	private void updateData(Category newObj, Category obj) {
+		newObj.setName(obj.getName());
 	}
 
 }
