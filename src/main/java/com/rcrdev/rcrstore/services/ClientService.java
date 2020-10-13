@@ -10,8 +10,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.rcrdev.rcrstore.domain.Address;
+import com.rcrdev.rcrstore.domain.City;
 import com.rcrdev.rcrstore.domain.Client;
+import com.rcrdev.rcrstore.domain.enums.ClientType;
 import com.rcrdev.rcrstore.dto.ClientDTO;
+import com.rcrdev.rcrstore.dto.ClientNewDTO;
+import com.rcrdev.rcrstore.repositories.AddressRepository;
 import com.rcrdev.rcrstore.repositories.ClientRepository;
 import com.rcrdev.rcrstore.services.exceptions.DataIntegrityException;
 import com.rcrdev.rcrstore.services.exceptions.ObjectNotFoundException;
@@ -21,6 +26,9 @@ public class ClientService {
 
 	@Autowired
 	private ClientRepository repo;
+	
+	@Autowired
+	private AddressRepository addressRepository;
 
 	public Client find(Integer id) {
 		Optional<Client> obj = repo.findById(id);
@@ -64,6 +72,37 @@ public class ClientService {
 	private void updateData(Client newObj, Client obj) {
 		newObj.setName(obj.getName());
 		newObj.setEmail(obj.getEmail());
+	}
+
+	public Client insert(Client obj) {
+		obj.setId(null); 
+		obj = repo.save(obj);
+		addressRepository.saveAll(obj.getAddresses());
+		return repo.save(obj);
+	}
+
+	public Client fromDTO(ClientNewDTO objDTO) {
+		Client cli = new Client(null, objDTO.getName(), objDTO.getEmail(), 
+				objDTO.getClientIdNumber(), ClientType.toEnum(objDTO.getType()));
+		
+		City cit = new City(objDTO.getCityId(), null, null);
+		
+		Address add = new Address(null, objDTO.getStreet(), objDTO.getNumber(), objDTO.getComplement(), 
+				objDTO.getNeighbourhood(), objDTO.getZipCode(), cli, cit);
+		
+		
+		cli.getAddresses().add(add);
+		
+		cli.getphoneNumbers().add(objDTO.getPhone1());
+		if (objDTO.getPhone2() != null) {
+			cli.getphoneNumbers().add(objDTO.getPhone2());
+		}
+		
+		if (objDTO.getPhone3() != null) {
+			cli.getphoneNumbers().add(objDTO.getPhone3());
+		}
+		
+		return cli;
 	}
 	
 	
