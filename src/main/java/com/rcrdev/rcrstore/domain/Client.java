@@ -49,7 +49,7 @@ public class Client implements Serializable {
 		this.name = name;
 		this.email = email;
 		this.clientIdNumber = clientIdNumber;
-		this.type = type.getCode(); //implementation to manage enum by id
+		this.type = (type==null) ? null : type.getCode(); //implementation to manage enum by id. Verificando que se for nulo, meter nulo mesmo. Sem isso causa um nullpointer exception ao tentar dar um PUT
 	}
 
 	public Integer getId() {
