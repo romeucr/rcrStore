@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -29,7 +30,8 @@ public class Client implements Serializable {
 	private String clientIdNumber;
 	private Integer type; //implementation to manage enum by id
 	
-	@OneToMany(mappedBy="client")
+	
+	@OneToMany(mappedBy="client", cascade=CascadeType.ALL) //toda operacao que afete cliente irá afetar também os enderecos. Se apaga cliente, apaga tbm os enderecos
 	private List<Address> addresses = new ArrayList<>();
 	
 	@ElementCollection

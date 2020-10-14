@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rcrdev.rcrstore.domain.Category;
 import com.rcrdev.rcrstore.dto.CategoryDTO;
@@ -29,6 +30,7 @@ public class CategoryService {
 				"Object not found! Id: " + id + ", Type: " + Category.class.getName()));
 	}
 
+	@Transactional
 	public Category insert(Category obj) {
 		obj.setId(null); // objeto novo tem que ter id nulo, se estiver valendo alguma coisa, o metodo
 							// vai considerar uma atualizacao e nao insercao

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rcrdev.rcrstore.domain.Address;
 import com.rcrdev.rcrstore.domain.City;
@@ -48,7 +49,7 @@ public class ClientService {
 		try {
 			repo.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Delete denied. There related entities.");
+			throw new DataIntegrityException("Delete denied. This client has active orders.");
 		}
 	}
 
@@ -74,6 +75,7 @@ public class ClientService {
 		newObj.setEmail(obj.getEmail());
 	}
 
+	@Transactional
 	public Client insert(Client obj) {
 		obj.setId(null); 
 		obj = repo.save(obj);

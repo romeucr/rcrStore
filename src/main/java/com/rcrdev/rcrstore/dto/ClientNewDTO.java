@@ -2,21 +2,44 @@ package com.rcrdev.rcrstore.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.rcrdev.rcrstore.services.validation.ClientInsert;
+
+@ClientInsert
 public class ClientNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty(message="Obligatory field.")
+	@Length(min=5, max=120, message="field size between 5 and 120 characteres.")
 	private String name;
+	
+	@NotEmpty(message="Obligatory field.")
+	@Email(message="invalid email")
 	private String email;
+	
+	@NotEmpty(message="Obligatory field.")
 	private String clientIdNumber;
+	
 	private Integer type; //implementation to manage enum by id
 	
+	@NotEmpty(message="Obligatory field.")
 	private String street;
+	
+	@NotEmpty(message="Obligatory field.")
 	private String number;
 	private String complement;
 	private String neighbourhood;
+	
+	@NotEmpty(message="Obligatory field.")
 	private String zipCode;
 	
+	@NotEmpty(message="Obligatory field.")
 	private String phone1;
+	
 	private String phone2;
 	private String phone3;
 	
