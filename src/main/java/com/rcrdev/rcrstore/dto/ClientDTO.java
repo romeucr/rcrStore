@@ -8,7 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.rcrdev.rcrstore.domain.Client;
+import com.rcrdev.rcrstore.services.validation.ClientUpdate;
 
+@ClientUpdate //anotacao customizada
 public class ClientDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
