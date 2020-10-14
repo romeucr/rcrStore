@@ -6,12 +6,20 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.rcrdev.rcrstore.domain.Client;
 import com.rcrdev.rcrstore.domain.enums.ClientType;
 import com.rcrdev.rcrstore.dto.ClientNewDTO;
+import com.rcrdev.rcrstore.repositories.ClientRepository;
 import com.rcrdev.rcrstore.resources.exceptions.FieldMessage;
 import com.rcrdev.rcrstore.services.validation.utils.BR;
 
 public class ClientInsertValidator implements ConstraintValidator<ClientInsert, ClientNewDTO> { //nome da anotacao e tipo de dado que vai aceitar a anotacao
+	
+	@Autowired
+	ClientRepository repo;
+	
 	@Override
 	public void initialize(ClientInsert ann) {
 	}
@@ -30,6 +38,10 @@ public class ClientInsertValidator implements ConstraintValidator<ClientInsert, 
 			list.add(new FieldMessage("clientIdNumber", "Client Id Number(CNPJ) Invalid!"));
 		}
 		
+		Client aux = repo.findByEmail(objDto.getEmail());
+		if (aux != null) {
+			list.add(new FieldMessage("email", "Email address already registered!"));
+		}
 		
 		for (FieldMessage e : list) { //como nao trabalha com FieldMessage (criado por nos), este FOR adiciona (para cada erro encontrado acima, um erro correspondente na lista de erros do framework
 			context.disableDefaultConstraintViolation();
