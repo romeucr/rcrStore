@@ -33,6 +33,11 @@ public class OrderItem implements Serializable {
 		this.price = price;
 	}
 	
+	//colocando o nome do metodo como get, a resposta é retornada no JSON
+	public Double getSubTotal() {
+		return (price - descount) * quantity;
+	}
+	
 	@JsonIgnore
 	public ClientOrder getClientOrder() {
 		return id.getClientOrder();

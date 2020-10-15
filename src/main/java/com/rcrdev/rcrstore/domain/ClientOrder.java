@@ -16,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class ClientOrder implements Serializable {
@@ -53,6 +52,14 @@ public class ClientOrder implements Serializable {
 		this.instant = instant;
 		this.client = client;
 		this.deliveryAddress = deliveryAddress;
+	}
+	
+	public Double getTotalValue() {
+		Double sum = 0.0;
+		for (OrderItem oi : items) {
+			sum = sum + oi.getSubTotal();
+		}
+		return sum;
 	}
 
 	public Integer getId() {
